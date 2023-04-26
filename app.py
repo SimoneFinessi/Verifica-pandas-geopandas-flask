@@ -39,6 +39,17 @@ def es5():
     media= [df[df["neighborhood"] == i]["price"].mean() for i in noRip]
     media=sorted(media)
     return render_template("risultato.html",risultato=media) 
- 
+
+@app.route('/es6', methods = ["post"])
+def es6():
+    def conversione(a,b):
+        ris=a*b
+        return ris
+    TC=int(request.form["TC"])
+    noRip=df["neighborhood"].unique()
+    media= [df[df["neighborhood"] == i]["price"].mean() for i in noRip]
+    media=sorted(media)
+    media2=[conversione(i,TC) for i in media]
+    return render_template("risultato.html",risultato=media) 
 if __name__ == '__main__':
     app.run(debug=True)
