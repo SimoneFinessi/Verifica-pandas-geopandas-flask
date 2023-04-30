@@ -1,0 +1,15 @@
+<html>
+    <head>
+
+    </head>
+    <body>
+          <form action="es1_v1" method = "post">
+                
+            {% for genere in list %}
+              <input type="checkbox" name="quar" value="{{genere}}">{{genere}}<br>
+            {% endfor %}
+        
+            <p><input type = "submit" value = "Clicca per conoscere i dati" /></p>
+          </form>
+    </body>
+</html>

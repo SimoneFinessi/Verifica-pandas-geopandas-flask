@@ -6,10 +6,26 @@ df=pd.read_excel("https://github.com/PolisenoRiccardo/perilPopolo/blob/main/mila
 @app.route('/')
 def home():
     return render_template("home.html")
+
+@app.route("/varianti")
+def var():
+    lista=df["neighborhood"].unique()
+    return render_template("varianti.html",list=lista)
+
 @app.route('/es1', methods = ["post"])
 def es1():
     quar=request.form["quar"]
     trovato=df[df.neighborhood.str.lower()==quar.lower()].sort_values(by=["date"]).to_html()
+    return render_template("risultato.html",risultato=trovato) 
+
+@app.route('/es1_v1', methods = ["post"])
+def es1_v1():
+    quar=request.form.getlist("quar")
+    trovato=pd.DataFrame()
+    for i in quar:
+        ciao=df[df.neighborhood.str.lower()==i.lower()]
+        trovato=pd.concat([trovato, ciao])
+    trovato=trovato.to_html()
     return render_template("risultato.html",risultato=trovato) 
 
 @app.route('/es2')
@@ -35,21 +51,19 @@ def es4():
 
 @app.route('/es5')
 def es5():
-    noRip=df["neighborhood"].unique()
-    media= [df[df["neighborhood"] == i]["price"].mean() for i in noRip]
-    media=sorted(media)
-    return render_template("risultato.html",risultato=media) 
+    trovato=df.groupby("neighborhood")[["price"]].mean().sort_values("price").reset_index().to_html()
+
+    return render_template("risultato.html",risultato=trovato) 
 
 @app.route('/es6', methods = ["post"])
 def es6():
-    def conversione(a,b):
-        ris=a*b
-        return ris
+    def convertitore(a,b):
+        for i in range(len(a)):
+            a.loc[i,'price']=a.loc[i].price*b
+        return a
     TC=int(request.form["TC"])
-    noRip=df["neighborhood"].unique()
-    media= [df[df["neighborhood"] == i]["price"].mean() for i in noRip]
-    media=sorted(media)
-    media2=[conversione(i,TC) for i in media]
+    trovato=df.groupby("neighborhood")[["price"]].mean().sort_values("price").reset_index()
+    media=convertitore(trovato,TC).to_html()
     return render_template("risultato.html",risultato=media) 
 if __name__ == '__main__':
     app.run(debug=True)
