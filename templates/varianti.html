@@ -3,6 +3,17 @@
 
     </head>
     <body>
+        <form action="es1_v2" method = "post">
+                  
+          <select name="quartiere_tendina">
+            {% for genere in list %}
+                <option value="{{genere}}">{{genere}}</option> 
+            {% endfor %}
+          </select>
+      
+          <p><input type = "submit" value = "Clicca per conoscere i dati" /></p>
+        </form>
+      
           <form action="es1_v1" method = "post">
                 
             {% for genere in list %}
@@ -11,5 +22,6 @@
         
             <p><input type = "submit" value = "Clicca per conoscere i dati" /></p>
           </form>
+
     </body>
 </html>
