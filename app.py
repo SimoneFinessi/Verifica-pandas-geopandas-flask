@@ -27,6 +27,11 @@ def es1_v1():
         trovato=pd.concat([trovato, ciao])
     trovato=trovato.to_html()
     return render_template("risultato.html",risultato=trovato) 
+@app.route('/es1_v2', methods = ["post"])
+def es1_v2():
+    quar=request.form["quartiere_tendina"]
+    trovato=df[df.neighborhood.str.lower()==quar.lower()].sort_values(by=["date"]).to_html()
+    return render_template("risultato.html",risultato=trovato) 
 
 @app.route('/es2')
 def es2():
